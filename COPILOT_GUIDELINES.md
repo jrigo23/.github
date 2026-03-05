@@ -1,0 +1,101 @@
+# Diretrizes de uso do GitHub Copilot (C#/.NET 8/9 + ADO.NET + Firebird 5)
+
+Estas diretrizes valem para o repositório. Ao gerar/refatorar código, o Copilot deve seguir as regras abaixo.
+
+## 1) Princípios (ordem de prioridade)
+1. **Correção e segurança** > observabilidade (logs/métricas) > performance > conveniência.
+2. **Consistência**: seguir padrões já existentes no repo (estrutura, nomes, estilo).
+3. **Mudanças pequenas**: preferir commits/PRs pequenos e revisáveis.
+4. **Mudança de comportamento exige testes** (unit e/ou integração).
+
+## 2) Padrões C# / .NET (ASP.NET Core e Worker)
+- Usar `async/await` para I/O (principalmente acesso ao banco). Evitar `.Result`/`.Wait()`.
+- Preferir **injeção de dependência** (DI) e `IOptions<T>` para configurações.
+- `CancellationToken`:
+  - em controllers/endpoints: propagar o token para services e chamadas ao DB quando suportado;
+  - em Workers: respeitar o token no loop e em delays.
+- Exceções:
+  - não capturar `Exception` sem ação; quando capturar, **adicionar contexto** e re-lançar ou converter para erro de domínio;
+  - evitar exceções “genéricas” para fluxo normal.
+- Logging:
+  - usar logging estruturado (`logger.LogInformation("... {Id}", id)` etc.);
+  - **não** logar connection strings, senhas, tokens, PII;
+  - logar IDs de correlação quando existirem (request/trace).
+
+## 3) Acesso a dados com ADO.NET (Firebird 5)
+### 3.1 Regras obrigatórias (segurança e consistência)
+- **Sempre** usar SQL parametrizado (`FbCommand` + parâmetros). Nunca concatenar input em SQL.
+- Sempre fechar/dispensar recursos: `await using`/`using` para `FbConnection`, `FbCommand`, `FbDataReader`, `FbTransaction`.
+- Nunca manter conexão como singleton; conexões devem ser de curto prazo (pooling faz o resto).
+
+### 3.2 Padrão de execução
+- Para leitura:
+  - preferir `ExecuteReaderAsync` com `CommandBehavior.SequentialAccess` quando lidar com payload grande (se aplicável);
+  - mapear explicitamente colunas (evitar `SELECT *`).
+- Para escrita:
+  - usar `ExecuteNonQueryAsync`;
+  - checar linhas afetadas quando fizer sentido (ex.: update de entidade deve afetar 1 linha).
+- Transações:
+  - se a operação tiver múltiplos comandos que precisam ser atômicos, **abrir transação** e associar ao command;
+  - se uma função recebe `FbTransaction` (padrão “ambient”), não deve criar outra sem necessidade.
+
+### 3.3 Convenções de SQL
+- Escrever SQL legível (quebras de linha, alinhamento).
+- Usar nomes de parâmetros consistentes (ex.: `@ClienteId`, `@DataInicial`).
+- Ordenação/paginação: sempre determinística (ex.: `ORDER BY Id`).
+- Evitar N+1 queries em loops; preferir operações em lote.
+
+### 3.4 Erros e retorno
+- Se o banco retornar erro, registrar contexto **sem vazar dados sensíveis** (ex.: nome da operação/repositório, IDs relevantes).
+- Não expor detalhes internos do banco diretamente para API pública (mapear para erro amigável/seguro quando for endpoint).
+
+## 4) Testes
+- Mudança de regra de negócio => atualizar/adicionar teste.
+- Para código com ADO.NET:
+  - quando possível, extrair mapeamento/transformações para funções testáveis sem DB;
+  - testes de integração com Firebird devem ser isolados (DB de teste) e documentados (como rodar).
+
+## 5) Estrutura e legibilidade
+- Funções pequenas, responsabilidade única.
+- Evitar duplicação: extrair helpers/repositories/services.
+- Comentários: explicar **por que** e suposições importantes (ex.: “Firebird usa X por causa de Y”).
+- Não introduzir complexidade “invisível” (reflection/dynamic/hacks) sem justificativa clara.
+
+## 6) Dependências
+- Não adicionar pacote NuGet novo sem justificativa no PR.
+- Preferir BCL e libs já existentes no repo.
+
+---
+
+# Diretrizes de processo (GitHub)
+
+## 7) Commits
+- Commits pequenos e com mensagem clara.
+- **Conventional Commits recomendado** (não obrigatório): `feat:`, `fix:`, `refactor:`, `test:`, `docs:`.
+
+## 8) Pull Requests (PR)
+Todo PR deve conter:
+- O que mudou (bullets)
+- Por que (motivação)
+- Como testar (passos)
+- Riscos/impactos (se aplicável)
+
+Checklist:
+- [ ] Build/CI passando
+- [ ] Testes atualizados/criados (se houve mudança de comportamento)
+- [ ] SQL parametrizado (sem concatenação de input)
+- [ ] Transação usada quando necessário
+- [ ] Sem secrets em código/config/logs
+- [ ] Documentação atualizada (se aplicável)
+
+## 9) Code review
+- Preferir pelo menos 1 aprovação.
+- Se mexer em acesso a dados, pedir review de alguém que conheça o modelo/SQL.
+- Se deixar TODO, criar issue e referenciar no PR.
+
+## 10) CI/CD (mínimo)
+- Build + test obrigatórios antes de merge.
+- Regras de branch protection recomendadas:
+  - exigir PR para merge na `main`
+  - exigir checks obrigatórios (build/test)
+  - bloquear force-push
