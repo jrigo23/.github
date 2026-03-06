@@ -34,7 +34,7 @@ Se houver qualquer risco de impacto em outro repositório `jrigo23/TDR*`, **semp
    - impacto esperado;
    - ações necessárias;
    - como validar/testar.
-2) Referenciar as issues abertas no PR/commit (ex.: seção “Impacto no ecossistema TDR��).
+2) Referenciar as issues abertas no PR/commit (ex.: seção "Impacto no ecossistema TDR").
 3) Evitar merge sem um plano claro de compatibilidade/rollout (quando aplicável).
 
 > Se não for possível determinar os repositórios afetados com segurança, ainda assim deve-se abrir ao menos 1 issue de rastreamento (“TDR - avaliar impacto cross-repo”) em um repositório apropriado e listar hipóteses/pendências.
