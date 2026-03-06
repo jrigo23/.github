@@ -111,7 +111,7 @@ Todo PR deve conter:
 - Como testar (passos)
 - Riscos/impactos (se aplicável)
 
-## Diretriz: Documentação sempre alinhada às mudanças
+### Diretriz: Documentação sempre alinhada às mudanças
 
 Sempre que uma mudança **alterar comportamento observável** ou **introduzir/alterar funcionalidades, padrões, configurações ou integrações**, a documentação deve ser readequada no mesmo PR/commit, no mínimo em um dos itens abaixo (conforme aplicável):
 
@@ -140,7 +140,7 @@ Checklist:
 - [ ] SQL parametrizado (sem concatenação de input)
 - [ ] Transação usada quando necessário
 - [ ] Sem secrets em código/config/logs
-- [ ] Documentação/README atualizados (quando houver mudança de funcionalidade/contrato/padrão/config)
+- [ ] Documentação/README atualizados quando houver mudança de funcionalidade/contrato/padrão/config (ou justificar “Sem impacto de documentação”)
 
 ## 9) Code review
 - Preferir pelo menos 1 aprovação.
