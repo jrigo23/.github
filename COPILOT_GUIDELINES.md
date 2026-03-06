@@ -19,7 +19,7 @@ Considere como “repositórios relacionados” todos os repositórios no GitHub
 - Ao alterar qualquer **contrato público** ou comportamento observável por clientes, você deve tratar como potencial impacto em outros repos `TDR*`.
 
 **Exemplos de mudanças que exigem ação coordenada:**
-- DTOs e contratos de API (request/response), validações, defaults, paginação/ordenção.
+- DTOs e contratos de API (request/response), validações, defaults, paginação/ordenação.
 - Rotas, nomes de endpoints, códigos de erro e payloads de erro.
 - Autenticação/autorização (claims/roles/scopes), headers, correlation IDs.
 - Regras de negócio com efeito cross-service.
