@@ -111,13 +111,36 @@ Todo PR deve conter:
 - Como testar (passos)
 - Riscos/impactos (se aplicável)
 
+## (Novo) Diretriz: Documentação sempre alinhada às mudanças
+
+Sempre que uma mudança **alterar comportamento observável** ou **introduzir/alterar funcionalidades, padrões, configurações ou integrações**, a documentação deve ser readequada no mesmo PR/commit, no mínimo em um dos itens abaixo (conforme aplicável):
+
+- `README.md` (visão geral, como rodar, como configurar, como usar)
+- documentação da API (Swagger/OpenAPI, exemplos de request/response, códigos de erro, paginação/ordenação)
+- docs internas (pasta `docs/`, wiki, ADRs, comentários “por que”, etc.)
+- instruções de migração/upgrade (breaking changes, mudanças de default, flags/configs novas)
+
+### Gatilhos obrigatórios (quando atualizar docs/README)
+Atualizar docs/README quando houver, por exemplo:
+- novo endpoint/rota ou alteração de contrato (DTOs, validações, defaults)
+- nova regra de negócio, mudança de fluxo, ou alteração de comportamento esperado
+- novos parâmetros de configuração (env vars/appsettings), novas permissões/roles/claims
+- mudança de padrão arquitetural (ex.: novo padrão de repository/service, logging, tratamento de erros)
+- alterações relevantes de SQL/schema/migrations ou requisitos de banco
+- adição/remoção de feature flags, jobs/workers, integrações externas
+
+### Critério de aceite
+- O PR deve conter uma seção **“Documentação”** descrevendo objetivamente:
+  - quais arquivos foram atualizados (ex.: `README.md`, `docs/xyz.md`);
+  - ou justificar explicitamente: **“Sem impacto de documentação”**.
+
 Checklist:
 - [ ] Build/CI passando
 - [ ] Testes atualizados/criados (se houve mudança de comportamento)
 - [ ] SQL parametrizado (sem concatenação de input)
 - [ ] Transação usada quando necessário
 - [ ] Sem secrets em código/config/logs
-- [ ] Documentação atualizada (se aplicável)
+- [ ] Documentação/README atualizados (quando houver mudança de funcionalidade/contrato/padrão/config)
 
 ## 9) Code review
 - Preferir pelo menos 1 aprovação.
