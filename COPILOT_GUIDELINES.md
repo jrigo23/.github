@@ -111,7 +111,7 @@ Todo PR deve conter:
 - Como testar (passos)
 - Riscos/impactos (se aplicável)
 
-## (Novo) Diretriz: Documentação sempre alinhada às mudanças
+## Diretriz: Documentação sempre alinhada às mudanças
 
 Sempre que uma mudança **alterar comportamento observável** ou **introduzir/alterar funcionalidades, padrões, configurações ou integrações**, a documentação deve ser readequada no mesmo PR/commit, no mínimo em um dos itens abaixo (conforme aplicável):
 
