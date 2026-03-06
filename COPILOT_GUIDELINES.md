@@ -1,3 +1,13 @@
+# Diretrizes de uso do GitHub Copilot (C#/.NET 8/9 + ADO.NET + Firebird 5)
+
+Estas diretrizes valem para o repositório. Ao gerar/refatorar código, o Copilot deve seguir as regras abaixo.
+
+## 1) Princípios (ordem de prioridade)
+1. **Correção e segurança** > observabilidade (logs/métricas) > performance > conveniência.
+2. **Consistência**: seguir padrões já existentes no repo (estrutura, nomes, estilo).
+3. **Mudanças pequenas**: preferir commits/PRs pequenos e revisáveis.
+4. **Mudança de comportamento exige testes** (unit e/ou integração).
+
 ## Ecossistema TDR (multi-repositório: .NET + Firebird)
 
 Este repositório faz parte do ecossistema **TDR**: um conjunto de backends **.NET** com acesso a dados via **ADO.NET + Firebird**, que expõem recursos para um ERP **totalmente baseado em APIs**.
@@ -28,16 +38,6 @@ Se houver qualquer risco de impacto em outro repositório `jrigo23/TDR*`, **semp
 3) Evitar merge sem um plano claro de compatibilidade/rollout (quando aplicável).
 
 > Se não for possível determinar os repositórios afetados com segurança, ainda assim deve-se abrir ao menos 1 issue de rastreamento (“TDR - avaliar impacto cross-repo”) em um repositório apropriado e listar hipóteses/pendências.
-
-# Diretrizes de uso do GitHub Copilot (C#/.NET 8/9 + ADO.NET + Firebird 5)
-
-Estas diretrizes valem para o repositório. Ao gerar/refatorar código, o Copilot deve seguir as regras abaixo.
-
-## 1) Princípios (ordem de prioridade)
-1. **Correção e segurança** > observabilidade (logs/métricas) > performance > conveniência.
-2. **Consistência**: seguir padrões já existentes no repo (estrutura, nomes, estilo).
-3. **Mudanças pequenas**: preferir commits/PRs pequenos e revisáveis.
-4. **Mudança de comportamento exige testes** (unit e/ou integração).
 
 ## 2) Padrões C# / .NET (ASP.NET Core e Worker)
 - Usar `async/await` para I/O (principalmente acesso ao banco). Evitar `.Result`/`.Wait()`.
