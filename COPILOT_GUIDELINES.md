@@ -1,3 +1,34 @@
+## Ecossistema TDR (multi-repositório: .NET + Firebird)
+
+Este repositório faz parte do ecossistema **TDR**: um conjunto de backends **.NET** com acesso a dados via **ADO.NET + Firebird**, que expõem recursos para um ERP **totalmente baseado em APIs**.
+
+Considere como “repositórios relacionados” todos os repositórios no GitHub sob o owner `jrigo23` cujo nome começa com `TDR` (padrão `jrigo23/TDR*`).
+
+### Regras obrigatórias (impacto entre repositórios)
+- **Não presuma** que o conteúdo/código dos outros repositórios está disponível no contexto atual.
+- Ao alterar qualquer **contrato público** ou comportamento observável por clientes, você deve tratar como potencial impacto em outros repos `TDR*`.
+
+**Exemplos de mudanças que exigem ação coordenada:**
+- DTOs e contratos de API (request/response), validações, defaults, paginação/ordenção.
+- Rotas, nomes de endpoints, códigos de erro e payloads de erro.
+- Autenticação/autorização (claims/roles/scopes), headers, correlation IDs.
+- Regras de negócio com efeito cross-service.
+- SQL, schemas, objetos do banco, scripts/migrations, queries críticas.
+- Qualquer mudança com potencial breaking-change.
+
+### Processo obrigatório quando houver impacto
+Se houver qualquer risco de impacto em outro repositório `jrigo23/TDR*`, **sempre**:
+1) **Abrir issue(s)** nos repositórios afetados descrevendo:
+   - o que mudou;
+   - por que;
+   - impacto esperado;
+   - ações necessárias;
+   - como validar/testar.
+2) Referenciar as issues abertas no PR/commit (ex.: seção “Impacto no ecossistema TDR��).
+3) Evitar merge sem um plano claro de compatibilidade/rollout (quando aplicável).
+
+> Se não for possível determinar os repositórios afetados com segurança, ainda assim deve-se abrir ao menos 1 issue de rastreamento (“TDR - avaliar impacto cross-repo”) em um repositório apropriado e listar hipóteses/pendências.
+
 # Diretrizes de uso do GitHub Copilot (C#/.NET 8/9 + ADO.NET + Firebird 5)
 
 Estas diretrizes valem para o repositório. Ao gerar/refatorar código, o Copilot deve seguir as regras abaixo.
