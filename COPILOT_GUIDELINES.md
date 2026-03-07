@@ -8,6 +8,37 @@ Estas diretrizes valem para o repositório. Ao gerar/refatorar código, o Copilo
 3. **Mudanças pequenas**: preferir commits/PRs pequenos e revisáveis.
 4. **Mudança de comportamento exige testes** (unit e/ou integração).
 
+## Ecossistema TDR (multi-repositório: .NET + Firebird)
+
+Este repositório faz parte do ecossistema **TDR**: um conjunto de backends **.NET** com acesso a dados via **ADO.NET + Firebird**, que expõem recursos para um ERP **totalmente baseado em APIs**.
+
+Considere como “repositórios relacionados” todos os repositórios no GitHub sob o owner `jrigo23` cujo nome começa com `TDR` (padrão `jrigo23/TDR*`).
+
+### Regras obrigatórias (impacto entre repositórios)
+- **Não presuma** que o conteúdo/código dos outros repositórios está disponível no contexto atual.
+- Ao alterar qualquer **contrato público** ou comportamento observável por clientes, você deve tratar como potencial impacto em outros repos `TDR*`.
+
+**Exemplos de mudanças que exigem ação coordenada:**
+- DTOs e contratos de API (request/response), validações, defaults, paginação/ordenação.
+- Rotas, nomes de endpoints, códigos de erro e payloads de erro.
+- Autenticação/autorização (claims/roles/scopes), headers, correlation IDs.
+- Regras de negócio com efeito cross-service.
+- SQL, schemas, objetos do banco, scripts/migrations, queries críticas.
+- Qualquer mudança com potencial breaking-change.
+
+### Processo obrigatório quando houver impacto
+Se houver qualquer risco de impacto em outro repositório `jrigo23/TDR*`, **sempre**:
+1) **Abrir issue(s)** nos repositórios afetados descrevendo:
+   - o que mudou;
+   - por que;
+   - impacto esperado;
+   - ações necessárias;
+   - como validar/testar.
+2) Referenciar as issues abertas no PR/commit (ex.: seção "Impacto no ecossistema TDR").
+3) Evitar merge sem um plano claro de compatibilidade/rollout (quando aplicável).
+
+> Se não for possível determinar os repositórios afetados com segurança, ainda assim deve-se abrir ao menos 1 issue de rastreamento (“TDR - avaliar impacto cross-repo”) em um repositório apropriado e listar hipóteses/pendências.
+
 ## 2) Padrões C# / .NET (ASP.NET Core e Worker)
 - Usar `async/await` para I/O (principalmente acesso ao banco). Evitar `.Result`/`.Wait()`.
 - Preferir **injeção de dependência** (DI) e `IOptions<T>` para configurações.
@@ -80,13 +111,36 @@ Todo PR deve conter:
 - Como testar (passos)
 - Riscos/impactos (se aplicável)
 
+### Diretriz: Documentação sempre alinhada às mudanças
+
+Sempre que uma mudança **alterar comportamento observável** ou **introduzir/alterar funcionalidades, padrões, configurações ou integrações**, a documentação deve ser readequada no mesmo PR/commit, no mínimo em um dos itens abaixo (conforme aplicável):
+
+- `README.md` (visão geral, como rodar, como configurar, como usar)
+- documentação da API (Swagger/OpenAPI, exemplos de request/response, códigos de erro, paginação/ordenação)
+- docs internas (pasta `docs/`, wiki, ADRs, comentários “por que”, etc.)
+- instruções de migração/upgrade (breaking changes, mudanças de default, flags/configs novas)
+
+### Gatilhos obrigatórios (quando atualizar docs/README)
+Atualizar docs/README quando houver, por exemplo:
+- novo endpoint/rota ou alteração de contrato (DTOs, validações, defaults)
+- nova regra de negócio, mudança de fluxo, ou alteração de comportamento esperado
+- novos parâmetros de configuração (env vars/appsettings), novas permissões/roles/claims
+- mudança de padrão arquitetural (ex.: novo padrão de repository/service, logging, tratamento de erros)
+- alterações relevantes de SQL/schema/migrations ou requisitos de banco
+- adição/remoção de feature flags, jobs/workers, integrações externas
+
+### Critério de aceite
+- O PR deve conter uma seção **“Documentação”** descrevendo objetivamente:
+  - quais arquivos foram atualizados (ex.: `README.md`, `docs/xyz.md`);
+  - ou justificar explicitamente: **“Sem impacto de documentação”**.
+
 Checklist:
 - [ ] Build/CI passando
 - [ ] Testes atualizados/criados (se houve mudança de comportamento)
 - [ ] SQL parametrizado (sem concatenação de input)
 - [ ] Transação usada quando necessário
 - [ ] Sem secrets em código/config/logs
-- [ ] Documentação atualizada (se aplicável)
+- [ ] Documentação/README atualizados quando houver mudança de funcionalidade/contrato/padrão/config (ou justificar “Sem impacto de documentação”)
 
 ## 9) Code review
 - Preferir pelo menos 1 aprovação.
