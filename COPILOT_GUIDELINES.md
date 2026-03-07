@@ -12,7 +12,14 @@ Estas diretrizes valem para o repositório. Ao gerar/refatorar código, o Copilo
 
 Este repositório faz parte do ecossistema **TDR**: um conjunto de backends **.NET** com acesso a dados via **ADO.NET + Firebird**, que expõem recursos para um ERP **totalmente baseado em APIs**.
 
-Considere como “repositórios relacionados” todos os repositórios no GitHub sob o owner `jrigo23` cujo nome começa com `TDR` (padrão `jrigo23/TDR*`).
+Considere como “repositórios relacionados” **somente** os repositórios listados em `repositories.md` (allowlist).
+
+### Fonte de verdade: lista de repositórios do projeto (obrigatório)
+
+**Sempre** use o arquivo `repositories.md` (na raiz deste repositório `jrigo23/.github`) como **allowlist** de repositórios que fazem parte do projeto/ecossistema TDR para análises, implementações, ajustes e avaliação de impacto cross-repo.
+
+- Não inferir `jrigo23/TDR*` por prefixo.
+- Se um repositório não estiver listado em `repositories.md`, trate como **fora de escopo** até o arquivo ser atualizado.
 
 ### Regras obrigatórias (impacto entre repositórios)
 - **Não presuma** que o conteúdo/código dos outros repositórios está disponível no contexto atual.
