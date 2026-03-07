@@ -23,7 +23,7 @@ Considere como “repositórios relacionados” **somente** os repositórios lis
 
 ### Regras obrigatórias (impacto entre repositórios)
 - **Não presuma** que o conteúdo/código dos outros repositórios está disponível no contexto atual.
-- Ao alterar qualquer **contrato público** ou comportamento observável por clientes, você deve tratar como potencial impacto em outros repositórios listados em repositories.md.
+- Ao alterar qualquer **contrato público** ou comportamento observável por clientes, você deve tratar como potencial impacto em outros repositórios listados em `repositories.md`.
 
 **Exemplos de mudanças que exigem ação coordenada:**
 - DTOs e contratos de API (request/response), validações, defaults, paginação/ordenação.
@@ -34,7 +34,7 @@ Considere como “repositórios relacionados” **somente** os repositórios lis
 - Qualquer mudança com potencial breaking-change.
 
 ### Processo obrigatório quando houver impacto
-Se houver qualquer risco de impacto em outros repositórios listados em repositories.md, **sempre**:
+Se houver qualquer risco de impacto em outros repositórios listados em `repositories.md`, **sempre**:
 1) **Abrir issue(s)** nos repositórios afetados descrevendo:
    - o que mudou;
    - por que;
